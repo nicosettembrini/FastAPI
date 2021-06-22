@@ -15,6 +15,37 @@ class Item(BaseModel):
 def read_root():
     return {"Hello": "World"}
 
+@app.get('/blog')
+def index(limit: int = 10, published: bool = True, sort: Optional[str] = None):
+    # only get 10 published posts
+    if published:
+        return {'data': f'{limit} published blog list'}
+    else:
+        return {'data': f'{limit} all blog list'}
+
+@app.get('/blog/unpublished')
+def unpublished():
+    return {'data': 'unpublished'}
+
+
+@app.get('/blog/{id}')
+def show(id: int):
+    #fetch blog with id = id 
+    return {'data': id}
+
+
+class Blog(BaseModel):
+    title: str
+    body: str
+    published: Optional[bool] 
+    pass
+
+@app.post('/blog')
+def create_blog(blog: Blog):
+    return {'data': f'Blog is created with title as {blog.title}'}
+
+
+
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
